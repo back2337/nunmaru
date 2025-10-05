@@ -1,5 +1,6 @@
-/* css/style.css */
+/* css/style.css - 최종 완성 버전 */
 
+/* 1. 전체 페이지 기본 스타일 */
 body {
     font-family: sans-serif;
     background-color: #f0f2f5;
@@ -9,11 +10,30 @@ body {
     line-height: 1.6;
 }
 
-h1, h2 {
-    color: #005a9c;
+/* 2. 로고 배너 스타일 (새롭게 추가된 핵심 부분) */
+.logo-banner {
+    background-image: url('/images/logo-banner.png'); /* 'images' 폴더 안의 로고 파일 */
+    background-size: cover;
+    background-position: center;
+    max-width: 840px; 
+    margin: 0 auto;
+    height: 250px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
 }
 
-header, main, footer {
+.logo-text {
+    font-size: 2.5em;
+    font-weight: bold;
+    color: white;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); 
+}
+
+/* 3. 메인 콘텐츠 및 푸터 스타일 */
+main, footer {
     max-width: 800px;
     margin: 0 auto;
     padding: 20px;
@@ -23,10 +43,25 @@ header, main, footer {
     margin-bottom: 20px;
 }
 
+h1, h2 {
+    color: #005a9c;
+}
+
+/* 4. 정보 표시 영역 스타일 */
+#weather-info {
+    font-size: 1.1em;
+    text-align: center;
+    padding: 15px;
+    background-color: #e9f5ff;
+    border-radius: 4px;
+    color: #005a9c;
+    font-weight: bold;
+}
+
 #report-summary {
     font-size: 1.2em;
     font-weight: bold;
-    color: #d9534f; /* 위험을 알리는 붉은색 계열 */
+    color: #d9534f;
 }
 
 #snow-alerts {
@@ -41,24 +76,15 @@ header, main, footer {
     margin-bottom: 10px;
 }
 
-footer {
-    text-align: center;
-    font-size: 0.9em;
-    color: #777;
-}
-
-#weather-info {
-    font-size: 1.1em;
-    text-align: center;
-    padding: 15px;
-    background-color: #e9f5ff;
-    border-radius: 4px;
-    color: #005a9c;
-    font-weight: bold;
-}
-
 hr {
     border: none;
     border-top: 1px solid #ddd;
     margin: 30px 0;
+}
+
+/* 5. 푸터 텍스트 스타일 */
+footer {
+    text-align: center;
+    font-size: 0.9em;
+    color: #777;
 }
