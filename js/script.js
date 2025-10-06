@@ -1,6 +1,5 @@
-// js/script.js 오류 수정 최종 버전
+// js/script.js 로딩 화면 + 모든 기능 포함 최종 버전
 
-// HTML 문서가 완전히 로드되었을 때 모든 스크립트를 실행하도록 감쌉니다.
 document.addEventListener('DOMContentLoaded', () => {
 
     // --- 1. API 호출 정보 및 시간 계산 ---
@@ -36,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let originalForecastItems = [];
 
     /**
-     * 메인 UI 업데이트 함수
+     * [전체 코드] 메인 UI 업데이트 함수
      */
     function updateUI(forecastItems) {
         const snowAlertCard = document.querySelector('.snow-alert-card');
@@ -60,7 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         function generateSummaryText(weather, snows) {
-            if (!weather || !weather.TMP) return "날씨 정보를 분석 중입니다..."; // 데이터 없을 때 방어 코드
+            if (!weather || !weather.TMP) return "날씨 정보를 분석 중입니다...";
             const temp = parseFloat(weather.TMP);
             const pty = parseInt(weather.PTY || 0);
             if (snows.length > 0) return "폭설 예보가 있습니다. 외출 시 교통 안전에 각별히 유의하세요.";
@@ -126,10 +125,17 @@ document.addEventListener('DOMContentLoaded', () => {
             console.log("✅ API 호출 성공!", data);
             originalForecastItems = data.response.body.items.item;
             updateUI(originalForecastItems);
+
+            // 로딩 완료 후, 로더를 숨기고 대시보드를 표시
+            document.getElementById('loader').style.display = 'none';
+            document.getElementById('dashboard').style.display = 'flex';
         })
         .catch(error => {
             console.error("❌ API 호출 오류:", error);
-            document.getElementById('summary-text').textContent = "데이터 로딩 실패. 새로고침 해주세요.";
+            const loader = document.getElementById('loader');
+            if(loader) {
+                loader.querySelector('.loader-text').innerHTML = "데이터를 불러오는데 실패했습니다.<br>잠시 후 새로고침 해주세요.";
+            }
         });
 
     // --- 3. 시간대별 예보 스크롤 기능 ---
@@ -177,4 +183,4 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     });
 
-}); // DOMContentLoaded 이벤트 리스너 종료
+});``

@@ -8,31 +8,43 @@
 </head>
 <body>
     <div class="container">
+        <!-- [수정] 로고 배너를 항상 표시되도록 바깥으로 이동 -->
         <header class="logo-banner"></header>
 
-        <section class="card current-weather">
-            <div class="location">강원도 삼척시</div>
-            <div class="temperature"><span id="current-temp">--</span>°</div>
-            <div class="sky-status" id="current-sky">--</div>
-            <div class="sub-info">
-                최고 <span id="temp-max">--</span>° / 최저 <span id="temp-min">--</span>° | 체감온도 <span id="feel-temp">--</span>°
+        <!-- [추가] 날씨 정보가 표시될 메인 콘텐츠 영역 -->
+        <main id="main-content">
+            <!-- [추가] 카드 영역만 대체할 로딩 화면 -->
+            <div id="loader" class="card">
+                <p class="loader-text">눈깨비가 최신 정보를<br>불러오고 있습니다...</p>
             </div>
-        </section>
 
-        <section class="card hourly-forecast">
-            <div id="hourly-container"></div>
-            <button id="scroll-left-btn" class="scroll-btn">‹</button>
-            <button id="scroll-right-btn" class="scroll-btn">›</button>
-        </section>
+            <!-- [수정] 날씨 카드들을 dashboard로 감싸고, 처음에는 숨김 -->
+            <div id="dashboard" style="display: none;">
+                <section class="card current-weather">
+                    <div class="location">강원도 삼척시</div>
+                    <div class="temperature"><span id="current-temp">--</span>°</div>
+                    <div class="sky-status" id="current-sky">--</div>
+                    <div class="sub-info">
+                        최고 <span id="temp-max">--</span>° / 최저 <span id="temp-min">--</span>° | 체감온도 <span id="feel-temp">--</span>°
+                    </div>
+                </section>
 
-        <section class="card summary">
-            <div id="summary-text">날씨 정보를 분석 중입니다...</div>
-        </section>
-        
-        <section class="card snow-alert-card" style="display: none;">
-            <h2>🚨 실시간 폭설 예보</h2>
-            <ul id="snow-alerts"></ul>
-        </section>
+                <section class="card hourly-forecast">
+                    <div id="hourly-container"></div>
+                    <button id="scroll-left-btn" class="scroll-btn">‹</button>
+                    <button id="scroll-right-btn" class="scroll-btn">›</button>
+                </section>
+
+                <section class="card summary">
+                    <div id="summary-text">날씨 정보를 분석 중입니다...</div>
+                </section>
+                
+                <section class="card snow-alert-card" style="display: none;">
+                    <h2>🚨 실시간 폭설 예보</h2>
+                    <ul id="snow-alerts"></ul>
+                </section>
+            </div>
+        </main>
     </div>
     <script src="js/script.js"></script>
 </body>

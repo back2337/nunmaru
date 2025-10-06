@@ -1,4 +1,4 @@
-/* css/style.css 스크롤 기능 추가 버전 */
+/* css/style.css 로딩 화면 수정 버전 */
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
 
 :root {
@@ -26,6 +26,12 @@ body {
     border-radius: 20px;
     padding: 25px;
 }
+/* [추가] 대시보드 내부 카드들의 간격을 위해 추가 */
+#dashboard {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
 .logo-banner {
     background-image: url('../images/logo-banner.png');
     background-size: cover;
@@ -33,30 +39,38 @@ body {
     height: 200px;
     border-radius: 20px;
 }
+/* [추가] 카드 형태의 로더 스타일 */
+#loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 300px; /* 로딩 중에 차지할 임시 높이 */
+}
+.loader-text {
+    font-size: 1.2em;
+    color: #555;
+    text-align: center;
+}
+/* ... (이하 모든 스타일은 이전과 동일) ... */
 .current-weather .location { font-size: 1.5em; font-weight: 500; }
 .current-weather .temperature { font-size: 6em; font-weight: 700; margin: 5px 0; }
 .current-weather .sky-status { font-size: 1.2em; margin-bottom: 10px; }
 .current-weather .sub-info { color: #616161; }
 .hourly-forecast {
-    overflow-x: hidden; /* 가로 스크롤바는 숨김 */
+    overflow-x: hidden;
     position: relative;
-    padding: 25px 0; /* 좌우 패딩을 제거하여 공간 확보 */
+    padding: 25px 0;
 }
 #hourly-container {
     display: flex;
     gap: 25px;
-    padding: 0 15px; /* 컨테이너 내부에 좌우 여백을 줌 */
-    overflow-x: auto; /* 컨테이너 자체에 스크롤 적용 */
-    -ms-overflow-style: none; /* IE, Edge 스크롤바 숨김 */
-    scrollbar-width: none; /* Firefox 스크롤바 숨김 */
+    padding: 0 15px;
+    overflow-x: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
-#hourly-container::-webkit-scrollbar {
-    display: none; /* Chrome, Safari 스크롤바 숨김 */
-}
-.hourly-item {
-    text-align: center;
-    flex-shrink: 0;
-}
+#hourly-container::-webkit-scrollbar { display: none; }
+.hourly-item { text-align: center; flex-shrink: 0; }
 .hourly-item .time { font-size: 0.9em; color: #616161; }
 .hourly-item .icon { font-size: 1.8em; margin: 8px 0; }
 .hourly-item .temp { font-size: 1.2em; font-weight: 500; }
