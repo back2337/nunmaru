@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>눈마루 - 실시간 날씨 정보</title>
+    <title>눈마루 - 실시간 폭설 대응 플랫폼</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
@@ -11,9 +11,25 @@
         <header class="logo-banner"></header>
         <main id="main-content">
             <div id="loader" class="card">
-                <p class="loader-text">눈깨비가 최신 정보를<br>불러오고 있습니다...</p>
+                <p class="loader-text">눈깨비가 최신 정보를<br>분석하고 있습니다...</p>
             </div>
             <div id="dashboard" style="display: none;">
+                <section id="strategy-briefing-card" class="card">
+                    <h2 class="card-title">🚨 전략 브리핑</h2>
+                    <div class="briefing-header">
+                        <div id="risk-gauge" class="risk-gauge">
+                            위험도: <span id="risk-level-text">--</span>
+                        </div>
+                        <div id="risk-tags" class="risk-tags"></div>
+                    </div>
+                    <p id="risk-recommendation" class="risk-recommendation">위험도를 분석 중입니다...</p>
+                    <div id="critical-time-warning" class="critical-time"></div>
+                    <div id="risk-details-toggle" class="risk-details-toggle">
+                        자세히 보기 <span>🔽</span>
+                    </div>
+                    <div id="risk-breakdown" class="risk-breakdown"></div>
+                </section>
+
                 <section class="card current-weather">
                     <div class="header-info">
                         <div class="location">강원도 삼척시</div>
@@ -40,11 +56,12 @@
                     <button id="scroll-left-btn" class="scroll-btn">‹</button>
                     <button id="scroll-right-btn" class="scroll-btn">›</button>
                 </section>
-                <section class="card summary">
-                    <div id="summary-text">날씨 정보를 분석 중입니다...</div>
-                </section>
+                
                 <section class="card snow-alert-card" style="display: none;">
-                    <h2>🚨 실시간 폭설 예보</h2>
+                    <h2>
+                        <span id="snow-alert-title-time">--</span>
+                        시간대별 상세 예보
+                    </h2>
                     <ul></ul>
                 </section>
             </div>
