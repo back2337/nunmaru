@@ -1,54 +1,81 @@
-/* css/style.css - 최종 완성 버전 (표준 상대 경로 적용) */
+/* css/style.css v3.1 최종 전체 코드 */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
 
-/* 1. 전체 페이지 기본 스타일 */
+:root {
+    --point-color: #FF6B00; /* 포인트 컬러: 주황색 */
+}
+
 body {
-    font-family: sans-serif;
-    background-color: #f0f2f5;
-    color: #333;
+    font-family: 'Noto Sans KR', sans-serif;
+    background-color: #f8f9fa; /* 더 밝은 회색 배경 */
+    color: #212121;
     margin: 0;
     padding: 20px;
-    line-height: 1.6;
-}
-
-/* 2. 로고 배너 스타일 */
-.logo-banner {
-    /* [❗ 수정된 부분] 표준 상대 경로를 사용합니다. */
-    background-image: url('../images/logo-banner.png');
-    
-    background-size: cover;
-    background-position: center;
-    max-width: 840px; 
-    margin: 0 auto;
-    height: 250px;
-    border-radius: 8px;
     display: flex;
     justify-content: center;
-    align-items: center;
-    margin-bottom: 20px;
 }
 
-/* 텍스트를 이미지에 포함했으므로, 이 부분은 비워두거나 삭제해도 좋습니다. */
-.logo-text { }
-
-/* 3. 메인 콘텐츠 및 푸터 스타일 */
-main, footer {
-    max-width: 800px;
-    margin: 0 auto;
-    padding: 20px;
-    background-color: #fff;
-    border-radius: 8px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    margin-bottom: 20px;
+.container {
+    width: 100%;
+    max-width: 420px; /* 기본은 모바일 최적화 너비 */
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
 }
 
-h1, h2 {
-    color: #005a9c;
+.card {
+    background-color: #ffffff; /* 흰색 카드 배경 */
+    border: 1px solid #e9ecef; /* 부드러운 테두리 추가 */
+    border-radius: 20px;
+    padding: 25px;
 }
 
-/* (이하 나머지 CSS 코드는 이전과 동일) */
-#weather-info { font-size: 1.1em; text-align: center; padding: 15px; background-color: #e9f5ff; border-radius: 4px; color: #005a9c; font-weight: bold; }
-hr { border: none; border-top: 1px solid #ddd; margin: 30px 0; }
-#report-summary { font-size: 1.2em; font-weight: bold; color: #d9534f; }
+/* [❗ 추가된 부분] 로고 배너 스타일을 다시 추가합니다. */
+.logo-banner {
+    background-image: url('../images/logo-banner.png');
+    background-size: cover;
+    background-position: center;
+    height: 200px;
+    border-radius: 20px;
+}
+
+/* 현재 날씨 블록 */
+.current-weather .location { font-size: 1.5em; font-weight: 500; }
+.current-weather .temperature { font-size: 6em; font-weight: 700; margin: 5px 0; }
+.current-weather .sky-status { font-size: 1.2em; margin-bottom: 10px; }
+.current-weather .sub-info { color: #616161; }
+
+/* 시간대별 예보 블록 */
+.hourly-forecast { overflow-x: auto; }
+#hourly-container { display: flex; gap: 25px; }
+.hourly-item { text-align: center; flex-shrink: 0; }
+.hourly-item .time { font-size: 0.9em; color: #616161; }
+.hourly-item .icon { font-size: 1.8em; margin: 8px 0; }
+.hourly-item .temp { font-size: 1.2em; font-weight: 500; }
+
+/* 요약 정보 블록 */
+.summary {
+    font-size: 1.1em;
+    font-weight: 500;
+    text-align: center;
+    background-color: #FFF3E0;
+}
+
+/* 폭설 예보 블록 */
+.snow-alert-card h2 { margin-top: 0; color: var(--point-color); }
 #snow-alerts { list-style-type: none; padding: 0; }
-#snow-alerts li { background-color: #f9f9f9; padding: 10px; border-left: 4px solid #005a9c; margin-bottom: 10px; }
-footer { text-align: center; font-size: 0.9em; color: #777; }
+#snow-alerts li { padding: 8px 0; border-bottom: 1px solid #eeeeee; }
+#snow-alerts li:last-child { border-bottom: none; }
+
+
+/* [❗❗❗ 가장 중요한 부분: 반응형 웹 규칙 ❗❗❗] */
+/* 화면 너비가 768px 이상일 때 (데스크톱 환경) 아래 스타일을 적용합니다. */
+@media (min-width: 768px) {
+    .container {
+        max-width: 800px; /* 컨테이너의 최대 너비를 넓힙니다. */
+    }
+
+    .logo-banner {
+        height: 250px; /* 데스크톱에서는 배너 높이를 더 높게 설정합니다. */
+    }
+}

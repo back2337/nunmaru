@@ -3,33 +3,44 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>눈마루 - 실시간 폭설 대응 플랫폼</title>
+    <title>눈마루 - 실시간 날씨 정보</title>
     <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <header class="logo-banner">
-    
-</header>
+    <div class="container">
+        <!-- [복원된 부분] 로고 배너 공간 -->
+        <header class="logo-banner"></header>
 
-    <main>
-        <h2>강원도 실시간 날씨 현황</h2>
+        <!-- 블록 1: 현재 날씨 -->
+        <section class="card current-weather">
+            <div class="location">강원도 삼척시</div>
+            <div class="temperature"><span id="current-temp">--</span>°</div>
+            <div class="sky-status" id="current-sky">--</div>
+            <div class="sub-info">
+                최고 <span id="temp-max">--</span>° / 최저 <span id="temp-min">--</span>° | 체감온도 <span id="feel-temp">--</span>°
+            </div>
+        </section>
+
+        <!-- 블록 2: 시간대별 예보 -->
+        <section class="card hourly-forecast">
+            <div id="hourly-container">
+                <!-- JavaScript가 여기에 시간대별 예보를 채워 넣을 것입니다. -->
+            </div>
+        </section>
+
+        <!-- 블록 3: 요약 정보 -->
+        <section class="card summary">
+            <div id="summary-text">날씨 정보를 분석 중입니다...</div>
+        </section>
         
-        <!-- [❗ 추가된 부분] 현재 날씨 정보가 표시될 전광판 -->
-        <div id="weather-info">날씨 정보를 불러오는 중입니다...</div>
-        
-        <hr> <!-- 정보를 구분하기 위한 수평선 -->
-
-        <h2>실시간 폭설 예보</h2>
-        <div id="report-summary">데이터를 불러오는 중입니다...</div>
-        <ul id="snow-alerts">
-            <!-- 자바스크립트가 여기에 폭설 예보를 추가할 것입니다. -->
-        </ul>
-    </main>
-
-    <footer>
-        <p>5조: 백선영, 백주영</p>
-    </footer>
-
+        <!-- 블록 4: 폭설 특별 예보 -->
+        <section class="card snow-alert-card">
+            <h2>🚨 실시간 폭설 예보</h2>
+            <ul id="snow-alerts">
+                <!-- JavaScript가 여기에 폭설 예보를 채워 넣을 것입니다. -->
+            </ul>
+        </section>
+    </div>
     <script src="js/script.js"></script>
 </body>
 </html>

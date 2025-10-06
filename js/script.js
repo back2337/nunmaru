@@ -1,11 +1,9 @@
-// js/script.js - 최종 버그 수정 버전
+// js/script.js v3.0 전체 코드
 
-// [❗ 수정된 부분] originalUrl의 오타('.k.')를 제거했습니다.
+// --- API 호출 정보 및 시간 계산 (기존과 동일) ---
 const API_KEY = "WUjoGM8jQl2I6BjPI7JdYw";
 const originalUrl = "https://apihub.kma.go.kr/api/typ02/openApi/VilageFcstInfoService_2.0/getVilageFcst";
 const proxyUrl = "https://cors-anywhere.herokuapp.com/";
-
-// 시간 계산 로직 (변경 없음)
 const now = new Date();
 let base_date = '', base_time = '';
 // ... (시간 계산 로직은 이전과 동일)
@@ -30,65 +28,69 @@ const params = new URLSearchParams({
 });
 const finalUrl = `${proxyUrl}${originalUrl}?${params.toString()}`;
 
+// --- [❗ 수정된 부분] 데이터 처리 및 UI 업데이트 로직 ---
 fetch(finalUrl)
     .then(response => response.json())
     .then(data => {
         console.log("✅ API 호출 성공!", data);
-
-        const summaryElement = document.getElementById('report-summary');
-        const alertsListElement = document.getElementById('snow-alerts');
-        const weatherInfoElement = document.getElementById('weather-info');
-
         const forecastItems = data.response.body.items.item;
         
-        const snowAlerts = [];
-        const currentWeatherData = {};
+        // 1. 데이터를 시간대별로 그룹화
+        const hourlyData = {};
+        forecastItems.forEach(item => {
+            if (!hourlyData[item.fcstTime]) {
+                hourlyData[item.fcstTime] = {};
+            }
+            hourlyData[item.fcstTime][item.category] = item.fcstValue;
+        });
 
-        // 데이터 추출 로직 (이전과 동일)
-        for (const item of forecastItems) {
-            const category = item.category;
-            const value = item.fcstValue;
-
-            if (category === "SNO" && parseFloat(value) > 0) {
-                snowAlerts.push(item);
+        // 2. 날씨 아이콘 매핑 함수
+        function getWeatherIcon(sky, pty) {
+            if (pty > 0) { // 강수 형태가 있으면 강수 아이콘 우선
+                if (pty === 1) return '💧'; // 비
+                if (pty === 2) return '🌧️'; // 비/눈
+                if (pty === 3) return '❄️'; // 눈
+                if (pty === 4) return '🌦️'; // 소나기
             }
-            if (category === "TMP" && currentWeatherData.temperature === undefined) {
-                currentWeatherData.temperature = value;
-            }
-            if (category === "REH" && currentWeatherData.humidity === undefined) {
-                currentWeatherData.humidity = value;
-            }
-            if (category === "PCP" && currentWeatherData.precipitation === undefined) {
-                currentWeatherData.precipitation = value;
-            }
+            if (sky === 1) return '☀️'; // 맑음
+            if (sky === 3) return '☁️'; // 구름많음
+            if (sky === 4) return '🌫️'; // 흐림
+            return '❓';
         }
 
-        // 화면 표시 로직 (이전과 동일)
-        let weatherHtml = `현재 기온: ${currentWeatherData.temperature}°C  |  습도: ${currentWeatherData.humidity}%`;
-        if (currentWeatherData.precipitation && currentWeatherData.precipitation !== "강수없음") {
-            weatherHtml += `  |  시간당 강수량: ${currentWeatherData.precipitation}`;
-        }
-        weatherInfoElement.innerHTML = weatherHtml;
+        // 3. UI 요소에 데이터 채우기
+        const firstHour = Object.keys(hourlyData).sort()[0];
+        document.getElementById('current-temp').textContent = hourlyData[firstHour].TMP;
+        document.getElementById('current-sky').textContent = {1: "맑음", 3: "구름많음", 4: "흐림"}[hourlyData[firstHour].SKY];
+        document.getElementById('temp-max').textContent = forecastItems.find(i => i.category === 'TMX').fcstValue;
+        document.getElementById('temp-min').textContent = forecastItems.find(i => i.category === 'TMN').fcstValue;
+        document.getElementById('feel-temp').textContent = hourlyData[firstHour].TMP; // 간단하게 현재기온으로 대체
 
+        // 4. 시간대별 예보 UI 생성
+        const hourlyContainer = document.getElementById('hourly-container');
+        hourlyContainer.innerHTML = ''; // 초기화
+        Object.keys(hourlyData).sort().slice(0, 6).forEach(time => { // 6시간만 표시
+            const hourData = hourlyData[time];
+            const icon = getWeatherIcon(parseInt(hourData.SKY), parseInt(hourData.PTY));
+            
+            const itemDiv = document.createElement('div');
+            itemDiv.className = 'hourly-item';
+            itemDiv.innerHTML = `
+                <div class="time">${time.substring(0,2)}시</div>
+                <div class="icon">${icon}</div>
+                <div class="temp">${hourData.TMP}°</div>
+            `;
+            hourlyContainer.appendChild(itemDiv);
+        });
+        
+        // 5. 요약 정보 및 폭설 예보 처리
+        document.getElementById('summary-text').textContent = "오늘도 맑고 쾌청한 하루 되세요!";
+        const snowAlerts = forecastItems.filter(item => item.category === 'SNO' && parseFloat(item.fcstValue) > 0);
+        const snowAlertsList = document.getElementById('snow-alerts');
         if (snowAlerts.length > 0) {
-            summaryElement.textContent = `🚨 주의: 총 ${snowAlerts.length}건의 유의미한 강설 예보가 있습니다.`;
-            alertsListElement.innerHTML = '';
-            for (const alert of snowAlerts) {
-                const date = alert.fcstDate;
-                const time = alert.fcstTime;
-                const amount = alert.fcstValue;
-                const listItem = document.createElement('li');
-                listItem.textContent = `${date.substring(4, 6)}월 ${date.substring(6, 8)}일 ${time.substring(0, 2)}시에는 약 ${amount}cm의 눈이 내릴 것으로 예상됩니다.`;
-                alertsListElement.appendChild(listItem);
-            }
+            snowAlertsList.innerHTML = snowAlerts.map(alert => `<li>${alert.fcstTime.substring(0,2)}시, 약 ${alert.fcstValue}cm 예상</li>`).join('');
         } else {
-            summaryElement.textContent = "✅ 분석 완료: 현재 유의미한 강설 예보가 없습니다.";
-            summaryElement.style.color = '#28a745';
+            snowAlertsList.innerHTML = '<li>현재 유의미한 강설 예보가 없습니다.</li>';
         }
     })
-    .catch(error => {
-        // 오류 처리 (이전과 동일)
-        console.error("❌ API 호출 오류:", error);
-        document.getElementById('weather-info').textContent = "날씨 정보 로딩 실패";
-        document.getElementById('report-summary').textContent = "데이터를 불러오는 데 실패했습니다. 잠시 후 다시 시도해 주세요.";
-    });
+    .catch(error => console.error("❌ API 호출 오류:", error));
