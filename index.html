@@ -8,10 +8,8 @@
 </head>
 <body>
     <div class="container">
-        <!-- [복원된 부분] 로고 배너 공간 -->
         <header class="logo-banner"></header>
 
-        <!-- 블록 1: 현재 날씨 -->
         <section class="card current-weather">
             <div class="location">강원도 삼척시</div>
             <div class="temperature"><span id="current-temp">--</span>°</div>
@@ -21,24 +19,19 @@
             </div>
         </section>
 
-        <!-- 블록 2: 시간대별 예보 -->
         <section class="card hourly-forecast">
-            <div id="hourly-container">
-                <!-- JavaScript가 여기에 시간대별 예보를 채워 넣을 것입니다. -->
-            </div>
+            <div id="hourly-container"></div>
+            <button id="scroll-left-btn" class="scroll-btn">‹</button>
+            <button id="scroll-right-btn" class="scroll-btn">›</button>
         </section>
 
-        <!-- 블록 3: 요약 정보 -->
         <section class="card summary">
             <div id="summary-text">날씨 정보를 분석 중입니다...</div>
         </section>
         
-        <!-- 블록 4: 폭설 특별 예보 -->
-        <section class="card snow-alert-card">
+        <section class="card snow-alert-card" style="display: none;">
             <h2>🚨 실시간 폭설 예보</h2>
-            <ul id="snow-alerts">
-                <!-- JavaScript가 여기에 폭설 예보를 채워 넣을 것입니다. -->
-            </ul>
+            <ul id="snow-alerts"></ul>
         </section>
     </div>
     <script src="js/script.js"></script>

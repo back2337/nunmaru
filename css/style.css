@@ -1,36 +1,31 @@
-/* css/style.css v3.1 최종 전체 코드 */
+/* css/style.css 스크롤 기능 추가 버전 */
 @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap');
 
 :root {
-    --point-color: #FF6B00; /* 포인트 컬러: 주황색 */
+    --point-color: #FF6B00;
 }
-
 body {
     font-family: 'Noto Sans KR', sans-serif;
-    background-color: #f8f9fa; /* 더 밝은 회색 배경 */
+    background-color: #f8f9fa;
     color: #212121;
     margin: 0;
     padding: 20px;
     display: flex;
     justify-content: center;
 }
-
 .container {
     width: 100%;
-    max-width: 420px; /* 기본은 모바일 최적화 너비 */
+    max-width: 420px;
     display: flex;
     flex-direction: column;
     gap: 15px;
 }
-
 .card {
-    background-color: #ffffff; /* 흰색 카드 배경 */
-    border: 1px solid #e9ecef; /* 부드러운 테두리 추가 */
+    background-color: #ffffff;
+    border: 1px solid #e9ecef;
     border-radius: 20px;
     padding: 25px;
 }
-
-/* [❗ 추가된 부분] 로고 배너 스타일을 다시 추가합니다. */
 .logo-banner {
     background-image: url('../images/logo-banner.png');
     background-size: cover;
@@ -38,44 +33,71 @@ body {
     height: 200px;
     border-radius: 20px;
 }
-
-/* 현재 날씨 블록 */
 .current-weather .location { font-size: 1.5em; font-weight: 500; }
 .current-weather .temperature { font-size: 6em; font-weight: 700; margin: 5px 0; }
 .current-weather .sky-status { font-size: 1.2em; margin-bottom: 10px; }
 .current-weather .sub-info { color: #616161; }
-
-/* 시간대별 예보 블록 */
-.hourly-forecast { overflow-x: auto; }
-#hourly-container { display: flex; gap: 25px; }
-.hourly-item { text-align: center; flex-shrink: 0; }
+.hourly-forecast {
+    overflow-x: hidden; /* 가로 스크롤바는 숨김 */
+    position: relative;
+    padding: 25px 0; /* 좌우 패딩을 제거하여 공간 확보 */
+}
+#hourly-container {
+    display: flex;
+    gap: 25px;
+    padding: 0 15px; /* 컨테이너 내부에 좌우 여백을 줌 */
+    overflow-x: auto; /* 컨테이너 자체에 스크롤 적용 */
+    -ms-overflow-style: none; /* IE, Edge 스크롤바 숨김 */
+    scrollbar-width: none; /* Firefox 스크롤바 숨김 */
+}
+#hourly-container::-webkit-scrollbar {
+    display: none; /* Chrome, Safari 스크롤바 숨김 */
+}
+.hourly-item {
+    text-align: center;
+    flex-shrink: 0;
+}
 .hourly-item .time { font-size: 0.9em; color: #616161; }
 .hourly-item .icon { font-size: 1.8em; margin: 8px 0; }
 .hourly-item .temp { font-size: 1.2em; font-weight: 500; }
-
-/* 요약 정보 블록 */
 .summary {
     font-size: 1.1em;
     font-weight: 500;
     text-align: center;
     background-color: #FFF3E0;
 }
-
-/* 폭설 예보 블록 */
 .snow-alert-card h2 { margin-top: 0; color: var(--point-color); }
 #snow-alerts { list-style-type: none; padding: 0; }
-#snow-alerts li { padding: 8px 0; border-bottom: 1px solid #eeeeee; }
+#snow-alerts li { padding: 15px 0; border-bottom: 1px solid #eeeeee; }
 #snow-alerts li:last-child { border-bottom: none; }
+.alert-time { font-weight: 700; font-size: 1.1em; margin-bottom: 8px; }
+.alert-details { font-size: 1em; color: #424242; margin-bottom: 10px; }
+.alert-details span { margin-right: 10px; }
+.alert-warning { font-size: 0.9em; color: #d32f2f; background-color: #fbe9e7; padding: 8px; border-radius: 4px; }
+.scroll-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 30px;
+    height: 30px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 1px solid #e9ecef;
+    border-radius: 50%;
+    font-size: 20px;
+    font-weight: bold;
+    color: #555;
+    cursor: pointer;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 3px;
+}
+.scroll-btn:hover { background-color: white; }
+#scroll-left-btn { left: 5px; }
+#scroll-right-btn { right: 5px; }
 
-
-/* [❗❗❗ 가장 중요한 부분: 반응형 웹 규칙 ❗❗❗] */
-/* 화면 너비가 768px 이상일 때 (데스크톱 환경) 아래 스타일을 적용합니다. */
 @media (min-width: 768px) {
-    .container {
-        max-width: 800px; /* 컨테이너의 최대 너비를 넓힙니다. */
-    }
-
-    .logo-banner {
-        height: 250px; /* 데스크톱에서는 배너 높이를 더 높게 설정합니다. */
-    }
+    .container { max-width: 800px; }
+    .logo-banner { height: 250px; }
 }
