@@ -12,6 +12,7 @@ body {
     padding: 20px;
     display: flex;
     justify-content: center;
+    overflow-x: hidden;
 }
 
 .container {
@@ -22,21 +23,42 @@ body {
     gap: 15px;
 }
 
+#main-content {
+    position: relative;
+}
+
 .card {
     background-color: #ffffff;
     border: 1px solid #e9ecef;
     border-radius: 20px;
     padding: 25px;
-    transition: background-color 0.5s ease, color 0.5s ease;
+    transition: all 0.3s ease-in-out;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.card:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+#loader {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 300px;
+    transition: opacity 0.5s ease-out, transform 0.5s ease-out;
 }
 
 #dashboard {
-    display: flex;
+    display: none; /* JS will change this to flex */
     flex-direction: column;
     gap: 15px;
+    opacity: 0;
+    transform: translateY(20px);
+    /* 대시보드 애니메이션은 로더가 사라지기 시작한 후 0.2초 뒤에 시작 */
+    transition: opacity 0.8s ease-out 0.2s, transform 0.8s ease-out 0.2s;
 }
 
-/* [복원] 현재 날씨 카드 동적 배경색 스타일 */
 .card.sunny { background-color: #81D4FA; }
 .card.cloudy { background-color: #BDBDBD; color: white; }
 .card.overcast { background-color: #90A4AE; color: white; }
@@ -55,7 +77,6 @@ body {
     color: #eeeeee;
 }
 
-/* 전략 브리핑 카드 스타일 */
 #strategy-briefing-card {
     border-width: 2px;
     border-color: transparent;
@@ -71,7 +92,6 @@ body {
 .risk-details-toggle.expanded span { transform: rotate(180deg); }
 .risk-breakdown { display: none; margin-top: 15px; padding: 20px; background-color: #f5f5f5; border-radius: 15px; font-size: 0.95em; line-height: 1.8; }
 
-/* 위험도 단계별 색상 시스템 */
 #strategy-briefing-card.level-interest { border-color: #1E40AF; background-color: #EDF3FD; color: #1E40AF; }
 .level-interest .risk-gauge { background-color: #1E40AF; color: white; }
 .level-interest .risk-tags { color: #1E40AF; }
@@ -84,13 +104,16 @@ body {
 .level-warning .risk-gauge { background-color: #C2410C; color: white; }
 .level-warning .risk-tags { color: #C2410C; }
 
-#strategy-briefing-card.level-severe { border-color: #991B1B; background-color: #FEF2F2; color: #991B1B; }
+#strategy-briefing-card.level-severe {
+    border-color: #991B1B;
+    background-color: #FEF2F2;
+    color: #991B1B;
+    animation: pulse 1.5s infinite;
+}
 .level-severe .risk-gauge { background-color: #991B1B; color: white; }
 .level-severe .risk-tags { color: #991B1B; }
 
-
 .logo-banner { background-image: url('../images/logo-banner.png'); background-size: cover; background-position: center; height: 200px; border-radius: 20px; }
-#loader { display: flex; justify-content: center; align-items: center; height: 300px; }
 .loader-text { font-size: 1.2em; color: #555; text-align: center; }
 .header-info { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
 .date-display { font-size: 1.1em; font-weight: 500; color: #616161; }
@@ -106,12 +129,27 @@ body {
 .hourly-forecast { overflow: hidden; position: relative; padding: 25px 0; }
 #hourly-container { display: flex; align-items: center; gap: 20px; padding: 0 25px; overflow-x: auto; -ms-overflow-style: none; scrollbar-width: none; }
 #hourly-container::-webkit-scrollbar { display: none; }
-.hourly-item { text-align: center; flex-shrink: 0; padding: 10px; border: 2px solid transparent; border-radius: 15px; }
+.hourly-item {
+    text-align: center;
+    flex-shrink: 0;
+    padding: 10px;
+    border: 2px solid transparent;
+    border-radius: 15px;
+    transition: all 0.3s ease;
+    opacity: 0;
+    transform: translateY(10px);
+    animation: fadeInSlideUpItem 0.5s ease-out forwards;
+}
 .date-divider { flex-shrink: 0; width: 2px; height: 60px; background-color: var(--point-color); margin: 0 15px; border-radius: 1px; }
 .hourly-item .time { font-size: 0.9em; color: #616161; }
 .hourly-item .icon { font-size: 1.8em; margin: 8px 0; }
 .hourly-item .temp { font-size: 1.2em; font-weight: 500; }
-.hourly-item.current-hour { border-color: var(--point-color); }
+.hourly-item.current-hour {
+    border-color: var(--point-color);
+    background-color: #fffaf0;
+    transform: scale(1.05) translateY(0); /* translateY(0) 추가 */
+    box-shadow: 0 2px 8px rgba(255, 107, 0, 0.2);
+}
 .snow-alert-card h2 { margin-top: 0; color: var(--point-color); }
 .snow-alert-card ul { list-style-type: none; padding: 0; }
 .snow-alert-card li { padding: 15px 0; border-bottom: 1px solid #eeeeee; }
@@ -120,17 +158,46 @@ body {
 .alert-details { font-size: 1em; color: #424242; margin-bottom: 10px; }
 .alert-details span { margin-right: 10px; }
 .alert-warning { font-size: 0.9em; color: #d32f2f; background-color: #fbe9e7; padding: 8px; border-radius: 4px; }
-.scroll-btn { position: absolute; top: 50%; transform: translateY(-50%); width: 30px; height: 30px; background-color: rgba(255, 255, 255, 0.8); border: 1px solid #e9ecef; border-radius: 50%; font-size: 20px; font-weight: bold; color: #555; cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center; padding-bottom: 3px; }
-.scroll-btn:hover { background-color: white; }
+.scroll-btn {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 30px;
+    height: 30px;
+    background-color: rgba(255, 255, 255, 0.8);
+    border: 1px solid #e9ecef;
+    border-radius: 50%;
+    font-size: 20px;
+    font-weight: bold;
+    color: #555;
+    cursor: pointer;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-bottom: 3px;
+    transition: all 0.3s ease;
+}
+.scroll-btn:hover {
+    background-color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-50%) scale(1.1);
+}
 #scroll-left-btn { left: 5px; }
 #scroll-right-btn { right: 5px; }
 
-/* [복원] 반응형 웹 디자인을 위한 미디어 쿼리 */
 @media (min-width: 768px) {
-    .container {
-        max-width: 800px;
-    }
-    .logo-banner {
-        height: 250px;
-    }
+    .container { max-width: 800px; }
+    .logo-banner { height: 250px; }
+}
+
+@keyframes fadeInSlideUpItem {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(153, 27, 27, 0.4); }
+    70% { transform: scale(1); box-shadow: 0 0 0 10px rgba(153, 27, 27, 0); }
+    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(153, 27, 27, 0); }
 }

@@ -1,0 +1,129 @@
+/* ADDED: body, container, main-content에 애니메이션 및 레이아웃 관련 스타일 추가 */
+body {
+    overflow-x: hidden; /* 가로 스크롤 방지 */
+}
+
+.container {
+    opacity: 0; /* 초기 투명하게 설정 */
+    transform: translateY(20px); /* 초기 아래로 약간 이동 */
+    animation: fadeInSlideUp 0.8s ease-out forwards; /* 애니메이션 적용 */
+}
+
+#main-content {
+    position: relative; /* 자식 요소의 절대 위치 지정을 위해 */
+}
+
+/* ADDED: loader card 애니메이션 */
+#loader {
+    animation: fadeOut 0.5s ease-out forwards; /* 로더 사라지는 애니메이션 */
+    animation-delay: 0.5s; /* 대시보드 나타나기 전까지 딜레이 */
+}
+
+/* ADDED: dashboard card들의 등장 애니메이션 */
+#dashboard {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInSlideUp 0.8s ease-out forwards;
+    animation-delay: 0.8s; /* 로더 사라진 후 등장하도록 딜레이 */
+}
+
+/* UPDATED: card 기본 스타일 (box-shadow 추가) */
+.card {
+    background-color: #ffffff;
+    border: 1px solid #e9ecef;
+    border-radius: 20px;
+    padding: 25px;
+    transition: all 0.3s ease-in-out; /* 모든 속성에 전환 효과 적용 */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); /* 은은한 그림자 추가 */
+}
+
+/* ADDED: 카드 호버 효과 (선택 사항) */
+.card:hover {
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+}
+
+/* UPDATED: 시간별 예보 아이템 (애니메이션 추가) */
+.hourly-item {
+    text-align: center;
+    flex-shrink: 0;
+    padding: 10px;
+    border: 2px solid transparent;
+    border-radius: 15px;
+    transition: all 0.3s ease; /* 전환 효과 추가 */
+    opacity: 0; /* 초기 투명하게 설정 */
+    transform: translateY(10px); /* 초기 아래로 약간 이동 */
+    animation: fadeInSlideUpItem 0.5s ease-out forwards; /* 애니메이션 적용 */
+    /* animation-delay는 JavaScript에서 동적으로 설정할 예정 */
+}
+
+.hourly-item.current-hour {
+    border-color: var(--point-color);
+    background-color: #fffaf0; /* 현재 시간 강조를 위한 배경색 */
+    transform: scale(1.05); /* 현재 시간 카드 확대 */
+    box-shadow: 0 2px 8px rgba(255, 107, 0, 0.2); /* 강조 그림자 */
+}
+
+/* ADDED: 스크롤 버튼 애니메이션 */
+.scroll-btn {
+    transition: all 0.3s ease;
+}
+
+.scroll-btn:hover {
+    background-color: white;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+    transform: translateY(-50%) scale(1.1);
+}
+
+/* ADDED: Keyframe 애니메이션 정의 */
+@keyframes fadeInSlideUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInSlideUpItem {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeOut {
+    from {
+        opacity: 1;
+    }
+    to {
+        opacity: 0;
+        display: none; /* 애니메이션 완료 후 숨김 */
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(255, 107, 0, 0.7);
+    }
+    70% {
+        transform: scale(1.03);
+        box-shadow: 0 0 0 10px rgba(255, 107, 0, 0);
+    }
+    100% {
+        transform: scale(1);
+        box-shadow: 0 0 0 0 rgba(255, 107, 0, 0);
+    }
+}
+
+/* ADDED: 위험도 브리핑 카드 애니메이션 */
+#strategy-briefing-card.level-severe {
+    animation: pulse 1.5s infinite; /* 심각 단계일 때만 맥박 애니메이션 */
+}
