@@ -13,7 +13,8 @@
             <div id="loader" class="card">
                 <p class="loader-text">눈깨비가 최신 정보를<br>분석하고 있습니다...</p>
             </div>
-            <div id="dashboard" style="display: none;">
+            <div id="dashboard" class="hidden">
+                <!-- ▼ [수정됨] 내부 요소 구조 전체 복구 -->
                 <section id="strategy-briefing-card" class="card">
                     <h2 class="card-title">🚨 전략 브리핑</h2>
                     <div class="briefing-header">
@@ -25,10 +26,11 @@
                     <p id="risk-recommendation" class="risk-recommendation">위험도를 분석 중입니다...</p>
                     <div id="critical-time-warning" class="critical-time"></div>
                     <div id="risk-details-toggle" class="risk-details-toggle">
-                        자세히 보기 <span>🔽</span>
+                        자세히 보기
                     </div>
                     <div id="risk-breakdown" class="risk-breakdown"></div>
                 </section>
+                <!-- ▲ [수정됨] 내부 요소 구조 전체 복구 -->
 
                 <section class="card current-weather">
                     <div class="header-info">
@@ -42,11 +44,11 @@
                     </div>
                     <div class="details-info">
                         <div>
-                            <span>💧 습도</span>
+                            <span id="humidity-label"></span>
                             <span id="current-reh">-- %</span>
                         </div>
                         <div>
-                            <span>💨 풍속</span>
+                            <span id="wind-label"></span>
                             <span id="current-wsd">-- m/s</span>
                         </div>
                     </div>
