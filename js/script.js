@@ -4,8 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const VILAGE_FCST_URL = "https://apihub.kma.go.kr/api/typ02/openApi/VilageFcstInfoService_2.0/getVilageFcst";
     const MID_TERM_FCST_URL = "https://apihub.kma.go.kr/api/typ02/openApi/MidFcstInfoService_2.0/getMidFcst";
     
-    /* [수정됨] 불안정한 corsproxy.io를 대체할 새로운 프록시 서비스로 변경 */
-    const proxyUrl = "https://api.allorigins.win/raw?url=";
+    /* [수정됨] 프록시 서비스를 맨 처음의 corsproxy.io로 변경 */
+    const proxyUrl = "https://corsproxy.io/?";
 
     let originalForecastItems = [];
     let originalMidTermForecast = null;
@@ -62,6 +62,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
     }
 
+    /* [수정됨] corsproxy.io 응답 구조에 맞게 파싱 로직 제거 */
     function fetchShortTermWeatherData() {
         const now = new Date();
         let base_date = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}`;
@@ -80,6 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return fetch(`${proxyUrl}${encodeURIComponent(fullUrl)}`).then(res => { if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`); return res.json(); }).then(data => data.response?.body?.items?.item);
     }
 
+    /* [수정됨] corsproxy.io 응답 구조에 맞게 파싱 로직 제거 */
     function fetchMidTermWeatherData() {
         const now = new Date();
         const utc = now.getTime() + (now.getTimezoneOffset() * 60 * 1000);
@@ -103,7 +105,6 @@ document.addEventListener('DOMContentLoaded', () => {
         const month = String(baseDate.getMonth() + 1).padStart(2, '0');
         const day = String(baseDate.getDate()).padStart(2, '0');
         const tmFc = `${year}${month}${day}${announcementTime}`;
-        
         const regId = '11D10000';
         
         const fullUrl = `${MID_TERM_FCST_URL}?${new URLSearchParams({ authKey: API_KEY, pageNo: '1', numOfRows: '10', dataType: 'JSON', regId: regId, tmFc })}`;
