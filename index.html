@@ -8,61 +8,87 @@
 </head>
 <body>
     <div class="container">
-        <header class="logo-banner"></header>
+        <header class="logo-banner">
+            <div class="dark-mode-toggle">
+                <input type="checkbox" id="dark-mode-switch" title="다크 모드 전환">
+                <label for="dark-mode-switch"></label>
+            </div>
+        </header>
         <main id="main-content">
             <div id="loader" class="card">
                 <p class="loader-text">눈깨비가 최신 정보를<br>분석하고 있습니다...</p>
             </div>
             <div id="dashboard" class="hidden">
-                <!-- ▼ [수정됨] 내부 요소 구조 전체 복구 -->
-                <section id="strategy-briefing-card" class="card">
-                    <h2 class="card-title">🚨 전략 브리핑</h2>
-                    <div class="briefing-header">
-                        <div id="risk-gauge" class="risk-gauge">
-                            위험도: <span id="risk-level-text">--</span>
-                        </div>
-                        <div id="risk-tags" class="risk-tags"></div>
-                    </div>
-                    <p id="risk-recommendation" class="risk-recommendation">위험도를 분석 중입니다...</p>
-                    <div id="critical-time-warning" class="critical-time"></div>
-                    <div id="risk-details-toggle" class="risk-details-toggle">
-                        자세히 보기
-                    </div>
-                    <div id="risk-breakdown" class="risk-breakdown"></div>
-                </section>
-                <!-- ▲ [수정됨] 내부 요소 구조 전체 복구 -->
+                <div class="main-layout">
+                    <!-- 왼쪽 컬럼: 전략 및 대응 정보 -->
+                    <div class="column-left">
+                        <section id="strategy-briefing-card" class="card">
+                            <h2 class="card-title">🚨 전략 브리핑</h2>
+                            <div class="briefing-header">
+                                <div id="risk-gauge" class="risk-gauge">
+                                    위험도: <span id="risk-level-text">--</span>
+                                </div>
+                                <div id="risk-tags" class="risk-tags"></div>
+                            </div>
+                            <p id="risk-recommendation" class="risk-recommendation">위험도를 분석 중입니다...</p>
+                            <div id="critical-time-warning" class="critical-time"></div>
+                            <div id="risk-details-toggle" class="risk-details-toggle">
+                                자세히 보기
+                            </div>
+                            <div id="risk-breakdown" class="risk-breakdown"></div>
+                        </section>
 
-                <section class="card current-weather">
-                    <div class="header-info">
-                        <div class="location">강원도 삼척시</div>
-                        <div id="current-date" class="date-display">--월 --일 (-)</div>
+                        <section id="action-guide-card" class="card">
+                            <h2 class="card-title">💡 폭설 행동요령</h2>
+                            <div id="action-guide-content">
+                                <p>위험도 분석 후 맞춤형 정보를 제공합니다.</p>
+                            </div>
+                        </section>
                     </div>
-                    <div class="temperature"><span id="current-temp">--</span>°</div>
-                    <div class="sky-status" id="current-sky">--</div>
-                    <div class="sub-info">
-                        최고 <span id="temp-max">--</span>° / 최저 <span id="temp-min">--</span>° | 체감온도 <span id="feel-temp">--</span>°
+
+                    <!-- 오른쪽 컬럼: 실시간 예보 정보 -->
+                    <div class="column-right">
+                        <section class="card current-weather">
+                            <div class="header-info">
+                                <div class="location">강원도 삼척시</div>
+                                <div id="current-date" class="date-display">--월 --일 (-)</div>
+                            </div>
+                            <div class="temperature"><span id="current-temp">--</span>°</div>
+                            <div class="sky-status" id="current-sky">--</div>
+                            <div class="sub-info">
+                                최고 <span id="temp-max">--</span>° / 최저 <span id="temp-min">--</span>° | 체감온도 <span id="feel-temp">--</span>°
+                            </div>
+                            <div class="details-info">
+                                <div>
+                                    <span id="humidity-label"></span>
+                                    <span id="current-reh">-- %</span>
+                                </div>
+                                <div>
+                                    <span id="wind-label"></span>
+                                    <span id="current-wsd">-- m/s</span>
+                                </div>
+                            </div>
+                        </section>
+
+                        <section class="card hourly-forecast">
+                            <div id="hourly-container"></div>
+                            <button id="scroll-left-btn" class="scroll-btn">‹</button>
+                            <button id="scroll-right-btn" class="scroll-btn">›</button>
+                        </section>
+
+                        <section id="weekly-forecast-card" class="card">
+                            <h2 class="card-title">🗓️ 주간 예보</h2>
+                            <div id="weekly-container">
+                                <p>주간 예보를 불러오는 중입니다...</p>
+                            </div>
+                        </section>
+                        
+                        <section class="card snow-alert-card" style="display: none;">
+                            <h2>🚨 실시간 폭설 예보</h2>
+                            <ul></ul>
+                        </section>
                     </div>
-                    <div class="details-info">
-                        <div>
-                            <span id="humidity-label"></span>
-                            <span id="current-reh">-- %</span>
-                        </div>
-                        <div>
-                            <span id="wind-label"></span>
-                            <span id="current-wsd">-- m/s</span>
-                        </div>
-                    </div>
-                </section>
-                <section class="card hourly-forecast">
-                    <div id="hourly-container"></div>
-                    <button id="scroll-left-btn" class="scroll-btn">‹</button>
-                    <button id="scroll-right-btn" class="scroll-btn">›</button>
-                </section>
-                
-                <section class="card snow-alert-card" style="display: none;">
-                    <h2>🚨 실시간 폭설 예보</h2>
-                    <ul></ul>
-                </section>
+                </div>
             </div>
         </main>
     </div>
