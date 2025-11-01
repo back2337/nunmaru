@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
 
 :root {
     --point-color: #FF5F6D;
@@ -38,7 +38,6 @@ body {
     transition: background-color 0.3s, color 0.3s;
 }
 
-/* [수정됨] 전체 컨테이너 너비를 확장 */
 .container {
     width: 100%;
     max-width: 1200px; 
@@ -51,18 +50,30 @@ body {
     position: relative;
 }
 
+/* 로고 배너 스타일 */
 .logo-banner {
-    background-image: url('../images/logo-banner.png');
-    background-size: cover;
-    background-position: center;
+    background-color: var(--bg-card);
     height: 150px;
     border-radius: 20px;
-    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+    box-shadow: 0 8px 32px 0 var(--shadow-color);
     margin-bottom: 20px;
     position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
 }
 
-/* [수정됨] Grid 레이아웃 재설계: 왼쪽 고정, 오른쪽 가변 */
+/* [수정됨] 로고 텍스트 스타일 */
+.logo-text h1 {
+    font-family: 'Montserrat', 'Noto Sans KR', sans-serif;
+    font-size: 3em;
+    font-weight: 900;
+    color: var(--text-primary);
+    margin: 0;
+    letter-spacing: 1px;
+}
+
 .main-layout {
     display: grid;
     grid-template-columns: 380px 1fr;
@@ -73,93 +84,26 @@ body {
     display: flex;
     flex-direction: column;
     gap: 15px;
-    min-width: 0; /* flex/grid 아이템의 내용 깨짐 방지 */
+    min-width: 0;
 }
 
 /* --- 3. 로더 및 대시보드 --- */
-#loader .loader-text {
-    font-size: 1.2em;
-    color: var(--text-secondary);
-    text-align: center;
-}
-
-#dashboard {
-    display: flex;
-    flex-direction: column;
-    opacity: 0;
-    transform: translateY(20px);
-    animation: fadeInSlideUp 0.8s ease-out 0.2s forwards;
-}
-
-.hidden {
-    display: none !important;
-}
+#loader .loader-text { font-size: 1.2em; color: var(--text-secondary); text-align: center; }
+#dashboard { display: flex; flex-direction: column; opacity: 0; transform: translateY(20px); animation: fadeInSlideUp 0.8s ease-out 0.2s forwards; }
+.hidden { display: none !important; }
 
 /* --- 4. 공통 카드 스타일 --- */
-.card {
-    background-color: var(--bg-card);
-    border: 1px solid var(--border-color);
-    border-radius: 24px;
-    padding: 25px;
-    box-shadow: 0 4px 12px var(--shadow-color);
-    transition: all 0.3s ease-in-out;
-    margin-bottom: 0;
-}
-
-.card:hover {
-    box-shadow: 0 6px 16px var(--shadow-hover-color);
-    transform: translateY(-4px);
-}
-
-.card-title {
-    margin: 0 0 15px 0;
-    font-size: 1.2em;
-    font-weight: 700;
-}
+.card { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 24px; padding: 25px; box-shadow: 0 4px 12px var(--shadow-color); transition: all 0.3s ease-in-out; margin-bottom: 0; }
+.card:hover { box-shadow: 0 6px 16px var(--shadow-hover-color); transform: translateY(-4px); }
+.card-title { margin: 0 0 15px 0; font-size: 1.2em; font-weight: 700; }
 
 /* --- 5. 다크 모드 토글 버튼 --- */
-.dark-mode-toggle {
-    position: absolute;
-    top: 15px;
-    left: 15px;
-    z-index: 100;
-}
-.dark-mode-toggle input[type="checkbox"] {
-    display: none;
-}
-.dark-mode-toggle label {
-    display: block;
-    width: 52px;
-    height: 28px;
-    background-color: rgba(0, 0, 0, 0.2);
-    border-radius: 14px;
-    cursor: pointer;
-    position: relative;
-    transition: background-color 0.3s ease;
-}
-.dark-mode-toggle label::after {
-    content: '';
-    display: block;
-    width: 22px;
-    height: 22px;
-    border-radius: 50%;
-    background-color: #fff;
-    position: absolute;
-    top: 3px;
-    left: 3px;
-    transition: transform 0.3s ease, filter 0.3s ease;
-    background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%23f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>');
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: 16px 16px;
-}
-.dark-mode-toggle input[type="checkbox"]:checked + label {
-    background-color: #60a5fa;
-}
-.dark-mode-toggle input[type="checkbox"]:checked + label::after {
-    transform: translateX(24px);
-    filter: invert(1);
-}
+.dark-mode-toggle { position: absolute; top: 15px; left: 15px; z-index: 100; }
+.dark-mode-toggle input[type="checkbox"] { display: none; }
+.dark-mode-toggle label { display: block; width: 52px; height: 28px; background-color: rgba(0, 0, 0, 0.2); border-radius: 14px; cursor: pointer; position: relative; transition: background-color 0.3s ease; }
+.dark-mode-toggle label::after { content: ''; display: block; width: 22px; height: 22px; border-radius: 50%; background-color: #fff; position: absolute; top: 3px; left: 3px; transition: transform 0.3s ease, filter 0.3s ease; background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="%23f59e0b" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>'); background-repeat: no-repeat; background-position: center; background-size: 16px 16px; }
+.dark-mode-toggle input[type="checkbox"]:checked + label { background-color: #60a5fa; }
+.dark-mode-toggle input[type="checkbox"]:checked + label::after { transform: translateX(24px); filter: invert(1); }
 
 /* --- 6. 카드별 상세 스타일 --- */
 .briefing-header { display: flex; justify-content: space-between; align-items: center; gap: 10px; margin-bottom: 15px; flex-wrap: wrap; }
@@ -184,12 +128,26 @@ body {
 .level-severe .risk-gauge { background: linear-gradient(45deg, #ef4444, #f87171); color: white; }
 .level-severe .risk-tags { color: #991b1b; }
 #strategy-briefing-card.level-severe { border-color: #f87171; animation: pulse 1.5s infinite; }
+
+/* [수정됨] 날씨 카드 텍스트 가독성 개선 */
+.current-weather.sunny,
+.current-weather.cloudy,
+.current-weather.snowy {
+    color: #212529; /* Primary text black */
+}
+.current-weather.sunny .sub-info, .current-weather.cloudy .sub-info, .current-weather.snowy .sub-info,
+.current-weather.sunny .details-info, .current-weather.cloudy .details-info, .current-weather.snowy .details-info,
+.current-weather.sunny .date-display, .current-weather.cloudy .date-display, .current-weather.snowy .date-display {
+    color: #495057; /* Secondary text dark gray */
+}
+
 .current-weather.sunny { background: linear-gradient(135deg, #81d4fa, #b3e5fc); }
 .current-weather.cloudy { background: linear-gradient(135deg, #bdbdbd, #e0e0e0); }
 .current-weather.overcast { background: linear-gradient(135deg, #90a4ae, #b0bec5); color: white; }
 .current-weather.rainy { background: linear-gradient(135deg, #78909c, #90a4ae); color: white; }
 .current-weather.snowy { background: linear-gradient(135deg, #e0e0e0, #eeeeee); }
 .current-weather.overcast .sub-info, .current-weather.overcast .details-info, .current-weather.overcast .date-display, .current-weather.rainy .sub-info, .current-weather.rainy .details-info, .current-weather.rainy .date-display { color: #eeeeee; }
+
 .header-info { display: flex; justify-content: space-between; align-items: center; margin-bottom: 5px; }
 .current-weather .location { font-size: 1.5em; font-weight: 500; }
 .date-display { font-size: 1.1em; font-weight: 500; }
@@ -210,6 +168,9 @@ body {
 .hourly-item .icon { font-size: 2.2em; margin: 8px 0; color: var(--text-primary); }
 .hourly-item .temp { font-size: 1.2em; font-weight: 500; }
 .hourly-item.current-hour { border-color: var(--point-color); background-color: rgba(255, 250, 240, 0.8); transform: scale(1.05) translateY(0); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); }
+/* [수정됨] 다크모드 현재 시간 배경 제거 */
+body.dark-mode .hourly-item.current-hour { background-color: transparent; }
+
 .date-divider { flex-shrink: 0; width: 2px; height: 60px; background-color: var(--point-color); margin: 0 15px; border-radius: 1px; }
 .scroll-btn { position: absolute; top: 50%; transform: translateY(-50%); width: 30px; height: 30px; background-color: var(--scroll-btn-bg); border: 1px solid var(--border-color); border-radius: 50%; font-size: 20px; color: var(--text-secondary); cursor: pointer; z-index: 10; display: flex; align-items: center; justify-content: center; transition: all 0.3s ease; }
 #scroll-left-btn { left: 5px; }
@@ -245,9 +206,9 @@ body {
     100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
 }
 
-/* [수정됨] 반응형 전환 로직 재설계 */
+/* 반응형 */
 @media (max-width: 1024px) {
     .main-layout {
-        grid-template-columns: 1fr; /* 1024px 이하에서 1단으로 전환 */
+        grid-template-columns: 1fr;
     }
 }
