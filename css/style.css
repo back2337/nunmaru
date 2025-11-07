@@ -64,7 +64,6 @@ body {
     text-align: center;
 }
 
-/* [수정됨] 로고 텍스트 스타일 */
 .logo-text h1 {
     font-family: 'Montserrat', 'Noto Sans KR', sans-serif;
     font-size: 3em;
@@ -74,26 +73,45 @@ body {
     letter-spacing: 1px;
 }
 
-.main-layout {
-    display: grid;
-    grid-template-columns: 380px 1fr;
-    gap: 20px;
-}
-
-.column-left, .column-right {
+/* --- 2. 메인 레이아웃 --- */
+#dashboard {
     display: flex;
     flex-direction: column;
-    gap: 15px;
+    gap: 20px;
+    opacity: 0; 
+    transform: translateY(20px); 
+    animation: fadeInSlideUp 0.8s ease-out 0.2s forwards;
+}
+
+.weather-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(420px, 1fr));
+    gap: 20px;
+    width: 100%;
+}
+
+.forecast-column {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
     min-width: 0;
 }
 
+
 /* --- 3. 로더 및 대시보드 --- */
 #loader .loader-text { font-size: 1.2em; color: var(--text-secondary); text-align: center; }
-#dashboard { display: flex; flex-direction: column; opacity: 0; transform: translateY(20px); animation: fadeInSlideUp 0.8s ease-out 0.2s forwards; }
 .hidden { display: none !important; }
 
 /* --- 4. 공통 카드 스타일 --- */
-.card { background-color: var(--bg-card); border: 1px solid var(--border-color); border-radius: 24px; padding: 25px; box-shadow: 0 4px 12px var(--shadow-color); transition: all 0.3s ease-in-out; margin-bottom: 0; }
+.card { 
+    background-color: var(--bg-card); 
+    border: 1px solid var(--border-color); 
+    border-radius: 24px; 
+    padding: 25px; 
+    box-shadow: 0 4px 12px var(--shadow-color); 
+    transition: all 0.3s ease-in-out; 
+    margin-bottom: 0;
+}
 .card:hover { box-shadow: 0 6px 16px var(--shadow-hover-color); transform: translateY(-4px); }
 .card-title { margin: 0 0 15px 0; font-size: 1.2em; font-weight: 700; }
 
@@ -129,18 +147,11 @@ body {
 .level-severe .risk-tags { color: #991b1b; }
 #strategy-briefing-card.level-severe { border-color: #f87171; animation: pulse 1.5s infinite; }
 
-/* [수정됨] 날씨 카드 텍스트 가독성 개선 */
-.current-weather.sunny,
-.current-weather.cloudy,
-.current-weather.snowy {
-    color: #212529; /* Primary text black */
-}
+.current-weather { display: flex; flex-direction: column; }
+.current-weather.sunny, .current-weather.cloudy, .current-weather.snowy { color: #212529; }
 .current-weather.sunny .sub-info, .current-weather.cloudy .sub-info, .current-weather.snowy .sub-info,
 .current-weather.sunny .details-info, .current-weather.cloudy .details-info, .current-weather.snowy .details-info,
-.current-weather.sunny .date-display, .current-weather.cloudy .date-display, .current-weather.snowy .date-display {
-    color: #495057; /* Secondary text dark gray */
-}
-
+.current-weather.sunny .date-display, .current-weather.cloudy .date-display, .current-weather.snowy .date-display { color: #495057; }
 .current-weather.sunny { background: linear-gradient(135deg, #81d4fa, #b3e5fc); }
 .current-weather.cloudy { background: linear-gradient(135deg, #bdbdbd, #e0e0e0); }
 .current-weather.overcast { background: linear-gradient(135deg, #90a4ae, #b0bec5); color: white; }
@@ -154,7 +165,7 @@ body {
 .current-weather .temperature { font-size: 6.5em; font-weight: 300; margin: 5px 0; text-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); }
 .current-weather .sky-status { font-size: 1.2em; margin-bottom: 10px; font-weight: 500; }
 .current-weather .sub-info { font-weight: 400; font-size: 1.05em; margin-bottom: 20px; opacity: 0.9; }
-.details-info { display: flex; justify-content: space-around; padding-top: 20px; border-top: 1px solid rgba(0, 0, 0, 0.08); }
+.details-info { display: flex; justify-content: space-around; padding-top: 20px; border-top: 1px solid rgba(0, 0, 0, 0.08); margin-top: auto; }
 .details-info div { text-align: center; }
 .details-info span { display: flex; align-items: center; justify-content: center; gap: 6px; }
 .details-info span:first-child { font-weight: 400; margin-bottom: 8px; font-size: 0.9em; opacity: 0.9; }
@@ -168,7 +179,6 @@ body {
 .hourly-item .icon { font-size: 2.2em; margin: 8px 0; color: var(--text-primary); }
 .hourly-item .temp { font-size: 1.2em; font-weight: 500; }
 .hourly-item.current-hour { border-color: var(--point-color); background-color: rgba(255, 250, 240, 0.8); transform: scale(1.05) translateY(0); box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); }
-/* [수정됨] 다크모드 현재 시간 배경 제거 */
 body.dark-mode .hourly-item.current-hour { background-color: transparent; }
 
 .date-divider { flex-shrink: 0; width: 2px; height: 60px; background-color: var(--point-color); margin: 0 15px; border-radius: 1px; }
@@ -176,6 +186,8 @@ body.dark-mode .hourly-item.current-hour { background-color: transparent; }
 #scroll-left-btn { left: 5px; }
 #scroll-right-btn { right: 5px; }
 .scroll-btn:hover { background-color: var(--bg-card); box-shadow: 0 2px 8px var(--shadow-hover-color); transform: translateY(-50%) scale(1.1); }
+
+.snow-alert-card { grid-column: 1 / -1; }
 .snow-alert-card h2 { color: var(--point-color); }
 .snow-alert-card ul { list-style-type: none; padding: 0; }
 .snow-alert-card li { padding: 15px 0; border-bottom: 1px solid var(--border-color); }
@@ -188,7 +200,9 @@ body.dark-mode .hourly-item.current-hour { background-color: transparent; }
 #action-guide-content li { padding: 8px 0; display: flex; align-items: flex-start; gap: 8px; line-height: 1.5; }
 #action-guide-content li::before { content: '✅'; }
 #action-guide-content h4 { margin: 12px 0 5px 0; font-size: 1.05em; color: var(--point-color); }
-#weekly-container { display: flex; flex-direction: column; gap: 10px; }
+
+#weekly-forecast-card { flex-grow: 1; display: flex; flex-direction: column; }
+#weekly-container { display: flex; flex-direction: column; gap: 10px; flex-grow: 1; justify-content: center; }
 .weekly-item { display: grid; grid-template-columns: 80px 1fr 60px; align-items: center; gap: 15px; padding: 8px 0; border-bottom: 1px solid var(--border-color); }
 .weekly-item:last-child { border-bottom: none; }
 .weekly-item .day { font-weight: 500; font-size: 1.05em; }
@@ -206,9 +220,140 @@ body.dark-mode .hourly-item.current-hour { background-color: transparent; }
     100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
 }
 
-/* 반응형 */
-@media (max-width: 1024px) {
-    .main-layout {
-        grid-template-columns: 1fr;
-    }
+/* --- 8. 반응형 --- */
+@media (max-width: 920px) {
+    .weather-grid { grid-template-columns: 1fr; }
+}
+
+/* --- 9. 교통정보 카드 및 CCTV 모달 스타일 --- */
+#traffic-info-card {
+    grid-column: 1 / -1;
+}
+
+#incident-container {
+    margin-bottom: 20px;
+}
+.incident-item {
+    padding: 15px;
+    border: 1px solid #f87171;
+    background-color: #fee2e2;
+    border-radius: 12px;
+    margin-bottom: 10px;
+}
+body.dark-mode .incident-item {
+    background-color: #450a0a;
+    border-color: #ef4444;
+}
+.incident-item .incident-header {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 1.1em;
+    font-weight: 700;
+}
+.incident-item .incident-type-tag {
+    background-color: #ef4444;
+    color: white;
+    padding: 4px 10px;
+    border-radius: 8px;
+    font-size: 0.9em;
+}
+.incident-item .incident-details {
+    margin-top: 8px;
+    padding-left: 5px;
+    color: var(--text-secondary);
+}
+
+#traffic-content ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+#traffic-content li {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 5px;
+    border-bottom: 1px solid var(--border-color);
+}
+#traffic-content li:last-child {
+    border-bottom: none;
+}
+
+.road-status .road-name { font-weight: 500; }
+.road-status .status-tag {
+    padding: 4px 10px;
+    border-radius: 12px;
+    color: white;
+    font-size: 0.85em;
+    font-weight: 500;
+    margin-left: 8px;
+}
+.road-status .status-smooth { background-color: #16a34a; } /* 원활 */
+.road-status .status-slow { background-color: #f59e0b; } /* 서행 */
+.road-status .status-jam { background-color: #dc2626; } /* 정체 */
+
+.cctv-btn {
+    padding: 6px 12px;
+    border: 1px solid var(--border-color);
+    background-color: transparent;
+    color: var(--text-primary);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+.cctv-btn:hover {
+    background-color: var(--point-color);
+    color: white;
+    border-color: var(--point-color);
+}
+
+/* CCTV 모달 스타일 */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modal-content {
+    background-color: var(--bg-card);
+    padding: 20px;
+    border-radius: 15px;
+    width: 90%;
+    max-width: 800px;
+    position: relative;
+}
+
+.modal-close {
+    position: absolute;
+    top: 10px;
+    right: 20px;
+    font-size: 2.5em;
+    font-weight: bold;
+    color: var(--text-secondary);
+    cursor: pointer;
+}
+
+#cctv-player-container {
+    position: relative;
+    padding-bottom: 56.25%; /* 16:9 비율 */
+    height: 0;
+    overflow: hidden;
+}
+
+#cctv-player-container iframe {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    border: none;
 }
