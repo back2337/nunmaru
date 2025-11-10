@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>NUNMARU - 강원도 폭설 대응 플랫폼</title>
-    <!-- [수정] Google Fonts 링크 업데이트 -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@900&family=Noto+Sans+KR:wght@300;400;500;700&display=swap" rel="stylesheet">
@@ -16,6 +15,10 @@
             <div class="logo-text">
                 <h1>NUNMARU</h1>
             </div>
+            
+            <!-- 강원대학교 로고 -->
+            <img src="images/knu_logo.png" alt="강원대학교 로고" class="partner-logo">
+            
             <div class="dark-mode-toggle">
                 <input type="checkbox" id="dark-mode-switch" title="다크 모드 전환">
                 <label for="dark-mode-switch"></label>
@@ -87,12 +90,9 @@
                         </section>
                     </div>
                     
-                    <!-- [추가] 실시간 교통 상황 카드 -->
                     <section id="traffic-info-card" class="card" style="display: none;">
                         <h2 class="card-title">🚦 실시간 교통 상황</h2>
-                        <!-- 돌발 정보가 표시될 영역 -->
                         <div id="incident-container"></div>
-                        <!-- 도로 소통 정보가 표시될 영역 -->
                         <div id="traffic-content">
                             <p>실시간 교통정보를 불러오는 중입니다...</p>
                         </div>
@@ -107,13 +107,10 @@
         </main>
     </div>
 
-    <!-- [추가] CCTV 영상 모달 -->
     <div id="cctv-modal" class="modal-overlay" style="display: none;">
         <div class="modal-content">
             <span class="modal-close">&times;</span>
-            <div id="cctv-player-container">
-                <!-- CCTV 영상이 여기에 삽입됩니다 -->
-            </div>
+            <div id="cctv-player-container"></div>
         </div>
     </div>
 

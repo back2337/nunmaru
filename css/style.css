@@ -57,11 +57,22 @@ body {
     border-radius: 20px;
     box-shadow: 0 8px 32px 0 var(--shadow-color);
     margin-bottom: 20px;
-    position: relative;
+    position: relative; /* 자식 요소의 absolute 위치 기준 */
     display: flex;
     justify-content: center;
     align-items: center;
     text-align: center;
+    transition: height 0.3s ease; /* [추가] 높이 변경 애니메이션 */
+}
+
+.logo-text h1 {
+    font-family: 'Montserrat', 'Noto Sans KR', sans-serif;
+    font-size: 3em;
+    font-weight: 900;
+    color: var(--text-primary);
+    margin: 0;
+    letter-spacing: 1px;
+    transition: font-size 0.3s ease; /* [추가] 폰트 크기 변경 애니메이션 */
 }
 
 .logo-text h1 {
@@ -356,4 +367,42 @@ body.dark-mode .incident-item {
     width: 100%;
     height: 100%;
     border: none;
+}
+
+/* --- 10. 파트너 로고 스타일 --- */
+.partner-logo {
+    position: absolute; /* 배너 안에서 자유롭게 위치 지정 */
+
+    /* [수정] 아래쪽, 오른쪽에 배치 */
+    bottom: 20px; /* 아래쪽에서 20px 떨어짐 */
+    right: 25px;  /* 오른쪽에서 25px 떨어짐 */
+    
+    height: 40px; /* 로고 세로 크기 조정 */
+    width: auto;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+}
+
+.partner-logo:hover {
+    opacity: 1;
+}
+
+
+/* --- 11. [추가] 모바일 반응형 스타일 --- */
+@media (max-width: 600px) {
+    /* 화면이 600px보다 작아지면 아래 스타일 적용 */
+
+    .logo-banner {
+        height: 120px; /* 모바일에서 배너 높이를 줄임 */
+    }
+
+    .logo-text h1 {
+        font-size: 2.2em; /* 모바일에서 NUNMARU 글씨 크기를 줄임 */
+    }
+
+    .partner-logo {
+        height: 35px;    /* 모바일에서 로고 크기를 줄임 */
+        bottom: 15px;    /* 아래쪽 여백을 줄임 */
+        right: 20px;     /* 오른쪽 여백을 줄임 */
+    }
 }
