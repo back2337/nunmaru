@@ -12,9 +12,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const ITS_API_KEY = "534861a33e2a4c139d2ce5a15c833548";
     const ITS_BASE_URL = "https://openapi.its.go.kr:9443/trafficInfo";
     
-    // ▼▼▼ [수정] CORS 확장 프로그램을 사용하므로 프록시 주소를 제거합니다. ▼▼▼
     const proxyUrl = "";
-    // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
 
     // ================================================================
     //  [2단계] 전역 변수 및 DOM 요소 설정
@@ -90,7 +88,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function constructApiUrl(baseUrl, params) {
-        // proxyUrl이 비어 있으면 API URL을 직접 사용, 아니면 프록시를 통해 사용
         const url = new URL(baseUrl);
         url.search = new URLSearchParams(params).toString();
         return proxyUrl ? `${proxyUrl}${encodeURIComponent(url)}` : url.toString();
@@ -144,7 +141,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function fetchTrafficData() {
         const gangwonBounds = { minX: "127.05", maxX: "129.38", minY: "37.02", maxY: "38.62" };
-        const commonParams = { apiKey: ITS_API_KEY, type: "ex", getType: "json", ...gangwonBounds };
+        
+        // ▼▼▼ [수정] 'apiKey'를 'key'로 변경합니다. ▼▼▼
+        const commonParams = { key: ITS_API_KEY, type: "ex", getType: "json", ...gangwonBounds };
+        // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
 
         const incidentUrl = constructApiUrl(ITS_BASE_URL + '/getAccidentInfo', commonParams);
         const cctvUrl = constructApiUrl(ITS_BASE_URL + '/getCCTVInfo', {...commonParams, cctvType: "1" });
@@ -208,7 +208,6 @@ document.addEventListener('DOMContentLoaded', () => {
     //  [4단계] UI 업데이트 함수
     // ================================================================
 
-    // (이하 모든 UI 업데이트 함수는 기존과 동일합니다. 수정 없음.)
     function updateTrafficUI(data) {
         renderIncidents(incidentContainer, data.incidents);
         renderRoadStatus(trafficContent, data.roadStatus);
