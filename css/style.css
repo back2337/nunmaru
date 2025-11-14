@@ -406,3 +406,49 @@ body.dark-mode .incident-item {
         right: 20px;     /* 오른쪽 여백을 줄임 */
     }
 }
+
+/* --- 12. [수정] 행동요령 이미지 스타일 (이미지 확대) --- */
+.action-guide-list {
+    margin-top: 15px; /* 제목과의 간격 */
+    display: flex;
+    flex-direction: column;
+    gap: 15px; /* 아이템 사이의 간격 */
+}
+
+.action-item {
+    display: flex;
+    align-items: center; /* 수직 중앙 정렬 */
+    gap: 20px; /* 이미지와 텍스트 사이 간격을 조금 늘립니다. */
+    background-color: var(--bg-primary); /* 배경색을 살짝 다르게 */
+    padding: 15px; /* 전체적인 안쪽 여백을 늘립니다. */
+    border-radius: 16px; /* 모서리를 조금 더 둥글게 합니다. */
+    border: 1px solid var(--border-color);
+}
+
+.action-item img {
+    width: 120px;  /* 너비를 60px -> 120px로 2배 키웁니다 (면적 4배) */
+    height: 120px; /* 높이를 60px -> 120px로 2배 키웁니다 (면적 4배) */
+    object-fit: cover; /* 이미지가 잘리지 않도록 */
+    border-radius: 12px; /* 이미지 모서리도 조금 더 둥글게 합니다. */
+    flex-shrink: 0; /* 화면이 줄어들 때 이미지가 찌그러지지 않도록 방지 */
+}
+
+.action-item p {
+    margin: 0;
+    line-height: 1.6; /* 텍스트 줄 간격 */
+    font-size: 1em; /* 폰트 크기를 약간 키워 균형을 맞춥니다. */
+    font-weight: 500;
+}
+
+/* 기존 리스트 스타일은 다른 단계에서 계속 사용하므로 유지합니다. */
+#action-guide-content li {
+    padding: 8px 0;
+    display: flex;
+    align-items: flex-start;
+    gap: 8px;
+    line-height: 1.5;
+}
+
+#action-guide-content li::before {
+    content: '✅';
+}

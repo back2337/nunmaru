@@ -12,12 +12,10 @@ document.addEventListener('DOMContentLoaded', () => {
     const ITS_API_KEY = "534861a33e2a4c139d2ce5a15c833548";
     const ITS_BASE_URL = "https://openapi.its.go.kr:9443/trafficInfo";
     
-    // ▼▼▼ [수정] 가장 처음에 사용했던 프록시 서버로 복구합니다. ▼▼▼
     const proxyUrl = "https://corsproxy.io/?";
-    // ▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲▲
 
     // ================================================================
-    //  [2단계] 전역 변수 및 DOM 요소 설정 (수정 없음)
+    //  [2단계] 전역 변수 및 DOM 요소 설정
     // ================================================================
     let originalForecastItems = [];
     let originalMidTermForecast = null;
@@ -92,7 +90,6 @@ document.addEventListener('DOMContentLoaded', () => {
     function constructApiUrl(baseUrl, params) {
         const url = new URL(baseUrl);
         url.search = new URLSearchParams(params).toString();
-        // 프록시 주소가 비어있지 않으면, URL을 감싸서 반환합니다.
         return proxyUrl ? `${proxyUrl}${encodeURIComponent(url)}` : url.toString();
     }
     
@@ -208,7 +205,6 @@ document.addEventListener('DOMContentLoaded', () => {
     //  [4단계] UI 업데이트 함수
     // ================================================================
 
-    // (이하 모든 UI 업데이트 함수는 기존과 동일합니다. 수정 없음.)
     function updateTrafficUI(data) {
         renderIncidents(incidentContainer, data.incidents);
         renderRoadStatus(trafficContent, data.roadStatus);
@@ -262,7 +258,97 @@ document.addEventListener('DOMContentLoaded', () => {
     function getWeatherIconSVG(sky, pty) { pty = parseInt(pty); sky = parseInt(sky); let iconName = 'sun'; if (pty > 0) { if (pty === 1 || pty === 4) iconName = 'cloud-rain'; else if (pty === 2) iconName = 'cloud-sleet'; else if (pty === 3) iconName = 'snowflake'; } else { if (sky === 3) iconName = 'cloud'; else if (sky === 4) iconName = 'cloud-fog'; } const icons = { 'sun': `<svg class="weather-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line></svg>`, 'cloud': `<svg class="weather-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"></path></svg>`, 'cloud-rain': `<svg class="weather-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="16" y1="13" x2="16" y2="21"></line><line x1="8" y1="13" x2="8" y2="21"></line><line x1="12" y1="15" x2="12" y2="23"></line><path d="M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25"></path></svg>`, 'cloud-sleet': `<svg class="weather-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="16" y1="13" x2="16" y2="21"></line><line x1="8" y1="13" x2="8" y2="21"></line><line x1="12" y1="15" x2="12" y2="23"></line><path d="M20 16.58A5 5 0 0 0 18 7h-1.26A8 8 0 1 0 4 15.25"></path><path d="M19 15l-1.5-1.5"></path><path d="M14.5 20l-1.5-1.5"></path><path d="M9.5 15l-1.5-1.5"></path></svg>`, 'snowflake': `<svg class="weather-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="2" x2="12" y2="22"></line><line x1="17" y1="7" x2="7" y2="17"></line><line x1="7" y1="7" x2="17" y2="17"></line><line x1="2" y1="12" x2="22" y2="12"></line></svg>`, 'cloud-fog': `<svg class="weather-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 14.899A7 7 0 1 1 15.71 8h1.79a4.5 4.5 0 0 1 2.5 8.242"/><path d="M16 17H7"/><path d="M17 21H9"/></svg>` }; return icons[iconName] || icons['sun']; }
     function updateUI(forecastItems, midTermData, isTestMode = false, scenarioData = null, riskOverride = null) { if (!forecastItems || forecastItems.length === 0) return; const now = new Date(); const hourlyData = {}; forecastItems.forEach(item => { const key = `${item.fcstDate}_${item.fcstTime}`; if (!hourlyData[key]) hourlyData[key] = { fcstDate: item.fcstDate, fcstTime: item.fcstTime }; hourlyData[key][item.category] = item.fcstValue; }); const sortedKeys = Object.keys(hourlyData).sort(); const currentDateString = `${now.getFullYear()}${String(now.getMonth() + 1).padStart(2, '0')}${String(now.getDate()).padStart(2, '0')}`; let currentData; if (isTestMode && scenarioData) { currentData = scenarioData; } else { const currentDataKey = sortedKeys.find(key => key >= `${currentDateString}_${now.getHours().toString().padStart(2,'0')}00`) || sortedKeys[0]; currentData = hourlyData[currentDataKey] || {}; } const initialDateStr = hourlyData[sortedKeys[0]]?.fcstDate || currentDateString; displayedDateStr = initialDateStr; document.getElementById('current-date').textContent = formatDateString(displayedDateStr); document.getElementById('current-temp').textContent = Math.round(parseFloat(currentData.TMP)) || '--'; let skyText; const pty = parseInt(currentData.PTY), sky = parseInt(currentData.SKY); if (pty > 0) { if (pty === 1 || pty === 4) skyText = '비'; else if (pty === 2) skyText = '진눈깨비'; else if (pty === 3) skyText = '눈'; else skyText = '강수'; } else { if (sky === 1) skyText = '맑음'; else if (sky === 3) skyText = '구름많음'; else if (sky === 4) skyText = '흐림'; else skyText = '정보없음'; } document.getElementById('current-sky').textContent = skyText; document.getElementById('temp-max').textContent = forecastItems.find(i=>i.category==='TMX')?.fcstValue || '--'; document.getElementById('temp-min').textContent = forecastItems.find(i=>i.category==='TMN')?.fcstValue || '--'; document.getElementById('humidity-label').innerHTML = `${HUMIDITY_ICON} 습도`; document.getElementById('current-reh').textContent = `${currentData.REH || '--'} %`; document.getElementById('wind-label').innerHTML = `${WIND_ICON} 풍속`; document.getElementById('current-wsd').textContent = `${currentData.WSD || '--'} m/s`; document.getElementById('feel-temp').textContent = calculateFeelsLikeTemp(currentData.TMP, currentData.WSD); const riskAnalysis = riskOverride ? riskOverride : calculateRisk(hourlyData, sortedKeys); briefingCard.style.display = 'block'; const allLevelClasses = ['level-interest', 'level-caution', 'level-warning', 'level-severe']; briefingCard.classList.remove(...allLevelClasses); if (riskAnalysis.className) briefingCard.classList.add(riskAnalysis.className); document.getElementById('risk-level-text').textContent = riskAnalysis.level; document.getElementById('risk-tags').textContent = riskAnalysis.tags; document.getElementById('risk-recommendation').textContent = riskAnalysis.recommendation; document.getElementById('critical-time-warning').textContent = riskAnalysis.criticalTime; document.getElementById('risk-breakdown').innerHTML = riskAnalysis.breakdownHtml; updateActionGuide(riskAnalysis.level); if(midTermData) { updateWeeklyForecast(midTermData); } else if (!isTestMode) { document.getElementById('weekly-container').innerHTML = '<p>주간 예보 정보를 불러올 수 없습니다.</p>'; } updateCardColors(currentData.SKY, currentData.PTY); hourlyContainer.innerHTML = ''; let startIndex; if (isTestMode && scenarioData) { const currentTestKey = `${scenarioData.fcstDate}_${scenarioData.fcstTime}`; const currentTestIndex = sortedKeys.findIndex(key => key === currentTestKey); startIndex = currentTestIndex !== -1 ? Math.max(0, currentTestIndex - 2) : 0; } else { const currentDataKey = `${currentDateString}_${now.getHours().toString().padStart(2, '0')}00`; startIndex = Math.max(0, sortedKeys.findIndex(key => key >= currentDataKey) - 2); } const endIndex = Math.min(sortedKeys.length, startIndex + 50), displayKeys = sortedKeys.slice(startIndex, endIndex); let lastDate = displayKeys.length > 0 ? hourlyData[displayKeys[0]].fcstDate : ''; displayKeys.forEach((key, index) => { const hourData = hourlyData[key]; if (!hourData) return; if (hourData.fcstDate !== lastDate) { const divider = document.createElement('div'); divider.className = 'date-divider'; divider.dataset.date = hourData.fcstDate; hourlyContainer.appendChild(divider); lastDate = hourData.fcstDate; } const itemDiv = document.createElement('div'); itemDiv.className = 'hourly-item'; itemDiv.dataset.date = hourData.fcstDate; if (!isTestMode && key === (sortedKeys.find(k => k >= `${currentDateString}_${now.getHours().toString().padStart(2,'0')}00`))) itemDiv.classList.add('current-hour'); if (isTestMode && scenarioData.fcstTime === hourData.fcstTime && scenarioData.fcstDate === hourData.fcstDate) itemDiv.classList.add('current-hour'); itemDiv.style.animationDelay = `${index * 0.05 + 0.1}s`; itemDiv.innerHTML = `<div class="time">${parseInt(hourData.fcstTime.substring(0, 2))}시</div><div class="icon">${getWeatherIconSVG(hourData.SKY, hourData.PTY)}</div><div class="temp">${hourData.TMP}°</div>`; hourlyContainer.appendChild(itemDiv); }); setTimeout(() => { const currentHourItem = hourlyContainer.querySelector('.current-hour'); if (currentHourItem) { const scrollPos = currentHourItem.offsetLeft - (hourlyContainer.offsetWidth / 2) + (currentHourItem.offsetWidth / 2); hourlyContainer.scrollTo({ left: Math.max(0, scrollPos), behavior: 'smooth' }); } else { hourlyContainer.scrollLeft = 0; } }, 100); const snowAlerts = forecastItems.filter(item => item.category === 'SNO' && parseFloat(item.fcstValue) > 0); updateSnowAlerts(snowAlerts, hourlyData); }
     function updateSnowAlerts(snowAlerts, hourlyData) { const snowAlertCard = document.querySelector('.snow-alert-card'); const snowAlertsList = snowAlertCard.querySelector('ul'); snowAlertsList.innerHTML = ''; if (snowAlerts.length > 0) { snowAlertCard.style.display = 'block'; const processedTimes = new Set(); snowAlerts.forEach(alert => { const key = `${alert.fcstDate}_${alert.fcstTime}`; if (processedTimes.has(key)) return; const hourData = hourlyData[key] || {}; const li = document.createElement('li'); let warning = "차량 운행 시 미끄럼에 주의하세요."; if (parseFloat(alert.fcstValue) >= 3.0) warning = "대설주의보 수준의 눈입니다. 가급적 외출을 자제하세요."; if (parseFloat(hourData.WSD) >= 9.0) warning += " 강풍을 동반하여 눈보라가 칠 수 있습니다."; li.innerHTML = `<div class="alert-time">${parseInt(alert.fcstTime.substring(0,2))}시 예보</div><div class="alert-details"><span>적설: ${alert.fcstValue}cm</span> | <span>기온: ${hourData.TMP}°C</span> | <span>풍속: ${hourData.WSD}m/s</span></div><div class="alert-warning">${warning}</div>`; snowAlertsList.appendChild(li); processedTimes.add(key); }); } else { snowAlertCard.style.display = 'none'; } }
-    function updateActionGuide(riskLevel) { const contentEl = document.getElementById('action-guide-content'); const guides = { '안전': `<h4>사전 준비</h4><ul><li>TV, 라디오, 스마트폰 등으로 기상정보를 수시로 확인합니다.</li><li>내 집 앞, 내 점포 앞 도로의 눈을 치울 준비를 합니다.</li><li>비상용품(응급약품, 손전등, 식수, 비상식량 등)을 미리 준비합니다.</li></ul>`, '관심': `<h4>대설 예보 시</h4><ul><li>차량용 월동용품(스노체인, 삽, 염화칼슘 등)을 준비하고, 운행 시에는 저속 운행 및 안전거리를 확보합니다.</li><li>어린이와 노약자는 외출을 자제합니다.</li><li>산간 고립 우려 지역은 식량, 연료 등 비상용품을 준비합니다.</li></ul>`, '주의': `<h4>대설주의보 발령 중</h4><ul><li>가급적 대중교통을 이용하고, 운전 시에는 고속도로 진입을 자제하고 국도를 이용합니다.</li><li>보온을 위해 외투, 장갑, 모자 등을 착용하고, 미끄럼 방지 신발을 신습니다.</li><li>수도계량기, 보일러 등은 동파되지 않도록 보온을 강화합니다.</li><li>붕괴가 우려되는 비닐하우스 등 농업 시설물은 받침대를 보강하는 등 사전 조치합니다.</li></ul>`, '경계': `<h4>대설경보 발령 중</h4><ul><li>외출을 최대한 자제하고, 차량 운행을 멈추고 안전한 곳으로 이동합니다.</li><li>차량이 고립된 경우, 119에 신고하고 차 안에서 구조를 기다립니다. (주기적으로 창문 환기)</li><li>주변의 독거노인 등 취약계층의 안부를 확인합니다.</li><li>노후 주택은 쌓인 눈의 무게로 무너질 위험이 있으니 안전점검을 실시합니다.</li></ul>`, '심각': `<h4>극심한 재난 상황</h4><ul><li>외출을 절대적으로 삼가고, 안전한 실내에 머무르며 재난 방송에 집중합니다.</li><li>TV, 라디오가 없을 경우, 핸드폰 등을 통해 재난문자 수신에 집중합니다.</li><li>차량이 고립된 경우, 가능한 모든 수단으로 구조 연락을 취하고, 색깔 있는 옷을 눈 위에 펼쳐 구조요원이 쉽게 찾을 수 있도록 합니다.</li></ul>` }; contentEl.innerHTML = guides[riskLevel] || `<p>현재 위험도에 맞는 행동요령 정보가 없습니다.</p>`; }
+    
+    function updateActionGuide(riskLevel) {
+        const contentEl = document.getElementById('action-guide-content');
+        const guides = {
+            '안전': `<h4>사전 준비</h4>
+                     <div class="action-guide-list">
+                         <div class="action-item">
+                             <img src="images/preparation_1.png" alt="기상 정보 확인">
+                             <p>TV, 라디오, 스마트폰 등으로 기상정보를 수시로 확인합니다.</p>
+                         </div>
+                         <div class="action-item">
+                             <img src="images/preparation_2.png" alt="제설 도구 준비">
+                             <p>내 집 앞, 내 점포 앞 도로의 눈을 치울 준비를 합니다.</p>
+                         </div>
+                         <div class="action-item">
+                             <img src="images/preparation_3.png" alt="비상용품 준비">
+                             <p>비상용품(응급약품, 손전등, 식수, 비상식량 등)을 미리 준비합니다.</p>
+                         </div>
+                     </div>`,
+            '관심': `<h4>대설 예보 시</h4>
+                     <div class="action-guide-list">
+                         <div class="action-item">
+                             <img src="images/forecast_1.png" alt="차량용 월동용품 준비">
+                             <p>차량용 월동용품(스노체인, 삽 등)을 준비하고, 운행 시에는 저속 운행 및 안전거리를 확보합니다.</p>
+                         </div>
+                         <div class="action-item">
+                             <img src="images/forecast_2.png" alt="어린이와 노약자 외출 자제">
+                             <p>어린이와 노약자는 가급적 외출을 자제합니다.</p>
+                         </div>
+                         <div class="action-item">
+                             <img src="images/forecast_3.png" alt="고립 우려 지역 비상용품 준비">
+                             <p>산간 고립 우려 지역은 식량, 연료 등 비상용품을 미리 준비합니다.</p>
+                         </div>
+                     </div>`,
+            '주의': `<h4>대설주의보 발령 중</h4>
+                     <div class="action-guide-list">
+                         <div class="action-item">
+                             <img src="images/caution_1.png" alt="대중교통 이용">
+                             <p>가급적 대중교통을 이용하고, 운전 시에는 고속도로 진입을 자제하고 국도를 이용합니다.</p>
+                         </div>
+                         <div class="action-item">
+                             <img src="images/caution_2.png" alt="보온 용품 착용">
+                             <p>보온을 위해 외투, 장갑, 모자 등을 착용하고, 미끄럼 방지 신발을 신습니다.</p>
+                         </div>
+                         <div class="action-item">
+                             <img src="images/caution_3.png" alt="수도계량기 동파 방지">
+                             <p>수도계량기, 보일러 등은 동파되지 않도록 보온을 강화합니다.</p>
+                         </div>
+                         <div class="action-item">
+                             <img src="images/caution_4.png" alt="농업 시설물 점검">
+                             <p>붕괴가 우려되는 비닐하우스 등 농업 시설물은 받침대를 보강하는 등 사전 조치합니다.</p>
+                         </div>
+                     </div>`,
+            '경계': `<h4>대설경보 발령 중</h4>
+                     <div class="action-guide-list">
+                         <div class="action-item">
+                             <img src="images/warning_1.png" alt="외출 자제">
+                             <p>외출을 최대한 자제하고, 차량 운행을 멈추고 안전한 곳으로 이동합니다.</p>
+                         </div>
+                         <div class="action-item">
+                             <img src="images/warning_2.png" alt="차량 고립 시 119 신고">
+                             <p>차량이 고립된 경우, 119에 신고하고 차 안에서 구조를 기다립니다. (주기적으로 창문 환기)</p>
+                         </div>
+                         <div class="action-item">
+                             <img src="images/warning_3.png" alt="취약계층 안부 확인">
+                             <p>주변의 독거노인 등 취약계층의 안부를 확인합니다.</p>
+                         </div>
+                         <div class="action-item">
+                             <img src="images/warning_4.png" alt="노후 주택 안전 점검">
+                             <p>노후 주택은 쌓인 눈의 무게로 무너질 위험이 있으니 안전점검을 실시합니다.</p>
+                         </div>
+                     </div>`,
+            '심각': `<h4>극심한 재난 상황</h4>
+                     <div class="action-guide-list">
+                         <div class="action-item">
+                             <img src="images/severe_1.png" alt="실내 대피 및 재난 방송 집중">
+                             <p>외출을 절대적으로 삼가고, 안전한 실내에 머무르며 재난 방송에 집중합니다.</p>
+                         </div>
+                         <div class="action-item">
+                             <img src="images/severe_2.png" alt="재난문자 수신 집중">
+                             <p>TV, 라디오가 없을 경우, 핸드폰 등을 통해 재난문자 수신에 집중합니다.</p>
+                         </div>
+                         <div class="action-item">
+                             <img src="images/severe_3.png" alt="차량 고립 시 구조 요청">
+                             <p>차량이 고립된 경우, 모든 수단으로 구조 연락을 취하고 색깔 옷을 눈 위에 펼쳐 쉽게 찾도록 합니다.</p>
+                         </div>
+                     </div>`
+        };
+        contentEl.innerHTML = guides[riskLevel] || `<p>현재 위험도에 맞는 행동요령 정보가 없습니다.</p>`;
+    }
+
     function updateWeeklyForecast(midTermData) { const container = document.getElementById('weekly-container'); if (!midTermData) { container.innerHTML = '<p>주간 예보 정보를 불러올 수 없습니다.</p>'; return; } container.innerHTML = ''; const weekdays = ['일', '월', '화', '수', '목', '금', '토']; let itemsAdded = 0; for (let i = 3; i <= 7; i++) { const wfKey = `wf${i}Am`; const taMinKey = `taMin${i}`; const taMaxKey = `taMax${i}`; if (midTermData[taMinKey] === undefined || midTermData[taMaxKey] === undefined) { continue; } itemsAdded++; const date = new Date(); date.setDate(date.getDate() + i); const dayName = weekdays[date.getDay()]; const itemDiv = document.createElement('div'); itemDiv.className = 'weekly-item'; let skyText = midTermData[wfKey] || "정보 없음"; let iconSvg = ''; if (skyText.includes('맑음')) iconSvg = getWeatherIconSVG(1, 0); else if (skyText.includes('구름많음')) iconSvg = getWeatherIconSVG(3, 0); else if (skyText.includes('흐림')) iconSvg = getWeatherIconSVG(4, 0); else if (skyText.includes('비')) iconSvg = getWeatherIconSVG(4, 1); else if (skyText.includes('눈')) iconSvg = getWeatherIconSVG(4, 3); else iconSvg = getWeatherIconSVG(3, 0); itemDiv.innerHTML = `<div class="day">${date.getDate()}일 (${dayName})</div><div class="icon">${iconSvg}</div><div class="temps"><span class="max">${midTermData[taMaxKey]}°</span> / <span class="min">${midTermData[taMinKey]}°</span></div>`; container.appendChild(itemDiv); } if (itemsAdded === 0) { container.innerHTML = '<p>주간 예보 정보가 없습니다.</p>'; } }
     function formatDateString(dateStr) { if (!dateStr || dateStr.length !== 8) return ''; const year = parseInt(dateStr.substring(0, 4)); const month = parseInt(dateStr.substring(4, 6)); const day = parseInt(dateStr.substring(6, 8)); const weekdays = ['일', '월', '화', '수', '목', '금', '토']; const date = new Date(year, month - 1, day); return `${month}월 ${day}일 (${weekdays[date.getDay()]})`; }
     function throttle(func, limit) { let inThrottle; return function() { const args = arguments; const context = this; if (!inThrottle) { func.apply(context, args); inThrottle = true; setTimeout(() => inThrottle = false, limit); } }; }
